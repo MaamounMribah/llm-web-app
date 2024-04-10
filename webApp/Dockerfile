@@ -17,4 +17,4 @@ EXPOSE 5000
 
 
 # Run app.py when the container launches
-ENTRYPOINT ["python3", "app.py"]
+ENTRYPOINT ["python3", "webApp/app.py"]

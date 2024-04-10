@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: europe-west3-docker.pkg.dev/${{ secrets.PROJECT_ID }}/maamoun/servingmodel:latest # Ensure this is the correct image path
+        image: europe-west3-docker.pkg.dev/int-infra-training-gcp/maamoun/servingmodel:latest # Ensure this is the correct image path
         imagePullPolicy: Never # Changed to 'IfNotPresent' to pull the image if it's not already on the node
         ports:
         - containerPort: 5000
