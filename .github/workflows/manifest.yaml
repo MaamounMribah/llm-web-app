@@ -7,23 +7,33 @@ on:
 
 jobs:
   build-and-push-docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      runs-on: ubuntu-latest
+      steps:
+        
+        #- name: Docker Cleanup
+        #  run: | 
+        #    docker system prune -af
+        
+        - uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+        - name: Set up Google Cloud
+          uses: google-github-actions/setup-gcloud@v0.2.0
+          with:
+            service_account_key: ${{ secrets.GCP_SA_KEY }}
+            project_id: ${{ secrets.PROJECT_ID }}
+            export_default_credentials: true
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: webApp/Dockerfile
-          push: true
-          tags: maamounm/servingmodel:latest
+        - name: Configure Docker for Google Artifact Registry
+          run: gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
+
+        - name: Build and push Docker image to Google Artifact Registry
+          uses: docker/build-push-action@v2
+          with:
+            context: .
+            file: webApp/Dockerfile
+            push: true
+            tags: europe-west3-docker.pkg.dev/${{ secrets.PROJECT_ID }}/maamoun/servingmodel:latest
+

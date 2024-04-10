@@ -36,8 +36,8 @@ def download_model(storage_client,bucket_name, source_blob_prefix, destination_d
 
 
 # Now you can initialize the GCP client
-#storage_client = storage.Client()
-credentials_file="int-infra-training-gcp-b4ede48008c9.json"
+storage_client = storage.Client()
+#credentials_file="int-infra-training-gcp-b4ede48008c9.json"
 #storage_client = storage.Client.from_service_account_json(credentials_file)
 bucket_name = 'my-bucket-int-infra-training-gcp'
 source_blob_prefix = 'bart-finetuned/'
