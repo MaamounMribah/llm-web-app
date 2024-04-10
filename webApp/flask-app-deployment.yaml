@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  labels:
+    app: flask-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: maamounm/servingmodel:latest # Ensure this is the correct image path
+        imagePullPolicy: Never # Changed to 'IfNotPresent' to pull the image if it's not already on the node
+        ports:
+        - containerPort: 5000
+#docker tag servingmodel:latest maamounm/servingmodel:latest
+#docker push maamounm/servingmodel:latest
+#sudo kubectl apply -f flask-app-deployment.yaml
+#sudo kubectl apply -f flask-app-service.yaml

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Knowledge Base</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .answer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f4e7;
+            border-left: 3px solid #5cb85c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter your prompt</h2>
+        <form action="/" method="post">
+            <textarea name="input_text" placeholder="Enter your text here..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        {% if answers %}
+            <div class="answer">
+                <h3>Fine-tuned Model Answer:</h3>
+                <p>{{ answers['fine_tuned'] }}</p>
+            </div>
+            <div class="answer">
+                <h3>Original Model Answer:</h3>
+                <p>{{ answers['original'] }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
