@@ -20,7 +20,7 @@ class LLMModel:
             inputs = inputs.to('cuda')
         
         # Generate output using the model
-        outputs = self.model.generate(inputs, max_length=200, early_stopping=True, do_sample=False,
+        outputs = self.model.generate(inputs, max_length=200, early_stopping=True, do_sample=True,
                                       num_beams=7, temperature=0.5, top_k=30, top_p=0.8, 
                                       no_repeat_ngram_size=2, length_penalty=2.0, repetition_penalty=1.1)
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)

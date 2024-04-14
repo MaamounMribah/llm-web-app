@@ -17,7 +17,7 @@ spec:
       containers:
       - name: flask-app
         image: europe-west3-docker.pkg.dev/int-infra-training-gcp/maamoun/servingmodel:latest # Ensure this is the correct image path
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         
