@@ -3,7 +3,7 @@ name: LLM Pipeline CI/CD Workflow
 on:
   push:
     branches:
-      - f1
+      - main
 
 jobs:
   build-and-push-docker:
