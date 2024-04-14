@@ -3,7 +3,7 @@ name: LLM Pipeline CI/CD Workflow
 on:
   push:
     branches:
-      - main
+      - f1
 
 jobs:
   build-and-push-docker:
@@ -36,4 +36,23 @@ jobs:
             file: webApp/Dockerfile
             push: true
             tags: europe-west3-docker.pkg.dev/${{ secrets.PROJECT_ID }}/maamoun/servingmodel:latest
+
+
+  apply-deploy-and-svc:
+    needs: build-and-push-docker  # Ensure this job runs after the Docker build and push job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Kubectl
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Apply Kubernetes manifests
+        run: |
+          gcloud container clusters get-credentials my-kubernetes-cluster --region europe-west3 --project ${{ secrets.PROJECT_ID }}
+          kubectl apply -f webApp/flask-app-deployment.yaml
+          kubectl apply -f webApp/flask-app-service.yaml
 
