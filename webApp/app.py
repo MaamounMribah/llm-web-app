@@ -50,7 +50,7 @@ destination_dir = 'saved_model/'
 
 
 # Download the model from GCS
-#download_model(storage_client,bucket_name, source_blob_prefix, destination_dir)
+download_model(storage_client,bucket_name, source_blob_prefix, destination_dir)
 
 # Load the model using the LLMModel class
 fine_tuned_model = LLMModel(destination_dir) 
