@@ -20,13 +20,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "2"
+        
 #docker tag servingmodel:latest maamounm/servingmodel:latest
 #docker push maamounm/servingmodel:latest
 #sudo kubectl apply -f flask-app-deployment.yaml
