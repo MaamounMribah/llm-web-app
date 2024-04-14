@@ -9,7 +9,7 @@ app = Flask(__name__)
 class LLMModel:
     def __init__(self, model_path: str):
         self.tokenizer = BartTokenizer.from_pretrained(model_path)
-        self.model = BartForConditionalGeneration.from_pretrained(model_path)
+        self.model = BartForConditionalGeneration.from_pretrained(model_path, ignore_mismatched_sizes=True)
         self.model.eval()
         if torch.cuda.is_available():
             self.model.to('cuda')
@@ -18,8 +18,11 @@ class LLMModel:
         inputs = self.tokenizer.encode(input_text, return_tensors="pt")
         if torch.cuda.is_available():
             inputs = inputs.to('cuda')
-        outputs = self.model.generate(inputs, max_length=400, early_stopping=True,do_sample=True,
-                                             num_beams=10,temperature=0.8,top_k=50,top_p=0.95,no_repeat_ngram_size=3,length_penalty=1.0,repetition_penalty=1.1)
+        
+        # Generate output using the model
+        outputs = self.model.generate(inputs, max_length=200, early_stopping=True, do_sample=False,
+                                      num_beams=7, temperature=0.5, top_k=30, top_p=0.8, 
+                                      no_repeat_ngram_size=2, length_penalty=2.0, repetition_penalty=1.1)
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 def download_model(storage_client,bucket_name, source_blob_prefix, destination_dir):
@@ -36,18 +39,18 @@ def download_model(storage_client,bucket_name, source_blob_prefix, destination_d
 
 
 # Now you can initialize the GCP client
-storage_client = storage.Client()
-#credentials_file="int-infra-training-gcp-b4ede48008c9.json"
-#storage_client = storage.Client.from_service_account_json(credentials_file)
+#storage_client = storage.Client()
+credentials_file="int-infra-training-gcp-b4ede48008c9.json"
+storage_client = storage.Client.from_service_account_json(credentials_file)
 bucket_name = 'my-bucket-int-infra-training-gcp'
-source_blob_prefix = 'bart-finetuned/'
+source_blob_prefix = 'saved_model/'
 
 # Directory to store the downloaded model files
-destination_dir = 'bart-finetuned'
+destination_dir = 'saved_model/'
 
 
 # Download the model from GCS
-download_model(storage_client,bucket_name, source_blob_prefix, destination_dir)
+#download_model(storage_client,bucket_name, source_blob_prefix, destination_dir)
 
 # Load the model using the LLMModel class
 fine_tuned_model = LLMModel(destination_dir) 

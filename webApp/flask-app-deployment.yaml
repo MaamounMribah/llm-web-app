@@ -17,9 +17,16 @@ spec:
       containers:
       - name: flask-app
         image: europe-west3-docker.pkg.dev/int-infra-training-gcp/maamoun/servingmodel:latest # Ensure this is the correct image path
-        imagePullPolicy: Never # Changed to 'IfNotPresent' to pull the image if it's not already on the node
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "2"
 #docker tag servingmodel:latest maamounm/servingmodel:latest
 #docker push maamounm/servingmodel:latest
 #sudo kubectl apply -f flask-app-deployment.yaml
