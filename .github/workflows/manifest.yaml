@@ -49,10 +49,22 @@ jobs:
         with:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ secrets.PROJECT_ID }}
+          export_default_credentials: true
 
-      - name: Apply Kubernetes manifests
-        run: |
-          gcloud container clusters get-credentials my-kubernetes-cluster --region europe-west3 --project ${{ secrets.PROJECT_ID }}
-          kubectl apply -f webApp/flask-app-deployment.yaml
-          kubectl apply -f webApp/flask-app-service.yaml
+      - name: Set up Google Cloud
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.PROJECT_ID }}
+          export_default_credentials: true
+
+        - name: Install gke-gcloud-auth-plugin
+          run: gcloud components install gke-gcloud-auth-plugin --quiet
+
+        - name: Apply Kubernetes manifests
+          run: |
+            gcloud container clusters get-credentials my-kubernetes-cluster --region europe-west3 --project ${{ secrets.PROJECT_ID }}
+            kubectl apply -f webApp/flask-app-deployment.yaml
+            kubectl apply -f webApp/flask-app-service.yaml
+
 
